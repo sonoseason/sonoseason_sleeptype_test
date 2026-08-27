@@ -89,21 +89,21 @@ const PRODUCTS = [
     name: "컴포터블",
     firmness: "MEDIUM",
     height: 270,
-    url: ""
+    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00003883"
   },
   {
     id: "advance_ms",
     name: "어드밴스 미디엄 소프트",
     firmness: "MEDIUM SOFT",
     height: 300,
-    url: ""
+    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00000325"
   },
   {
     id: "advance_m",
     name: "어드밴스 미디엄",
     firmness: "MEDIUM",
     height: 300,
-    url: ""
+    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00000321"
   },
   {
     id: "sensation",
@@ -111,7 +111,7 @@ const PRODUCTS = [
     firmness: "MEDIUM ↔ FIRM",
     height: 300,
     dual: true,
-    url: ""
+    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00003884"
   },
   {
     id: "signature",
@@ -119,7 +119,7 @@ const PRODUCTS = [
     firmness: "MEDIUM ↔ FIRM",
     height: 340,
     dual: true,
-    url: ""
+    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00003885"
   }
 ];
 
@@ -347,14 +347,18 @@ function showResult() {
   $("alsoProducts").innerHTML = [second, third]
     .filter(Boolean)
     .map((product, index) => `
-      <div class="also-product">
+      <a class="also-product"
+         href="${product.url}"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="${product.name} 제품 자세히 보기">
         <span class="num">${String(index + 2).padStart(2, "0")}</span>
         <div>
           <strong>${product.name}</strong>
           <small>${product.firmness} · ${product.height}mm</small>
         </div>
         <span class="arrow">→</span>
-      </div>
+      </a>
     `)
     .join("");
 

@@ -781,3 +781,8 @@ button {
     margin-bottom: 16px;
   }
 }
+
+.also-product {
+  color: inherit;
+  text-decoration: none;
+}
