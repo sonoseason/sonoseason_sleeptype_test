@@ -342,7 +342,7 @@ function showResult() {
   `;
 
   $("recommendReason").textContent =
-    `고객님의 수면 조건과 취향을 종합했을 때 가장 먼저 체험해볼 것을 추천하는 매트리스입니다.`;
+    `고객님의 수면 조건과 취향을 종합했을 때, 이 매트리스를 먼저 체험해보시길 추천드립니다.`;
 
   $("alsoProducts").innerHTML = [second, third]
     .filter(Boolean)

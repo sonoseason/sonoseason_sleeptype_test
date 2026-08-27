@@ -704,3 +704,80 @@ button {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+
+/* =========================
+   V4 BRAND / DESKTOP FIX
+   ========================= */
+
+.brand-logo {
+  display: block;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-logo-white {
+  height: 23px;
+  margin: 0 auto 34px;
+}
+
+.brand-logo-dark {
+  height: 20px;
+}
+
+.quiz-brand-row {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  margin-bottom: 12px;
+}
+
+.store-find-btn {
+  width: 100%;
+  min-height: 58px;
+  margin-top: 22px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: var(--sub-01);
+  color: var(--white);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+.store-find-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* PC에서도 모바일 UX를 넓게 늘리지 않고 중앙에 배치 */
+@media (min-width: 720px) {
+  .quiz-screen {
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .quiz-shell {
+    width: min(100%, 620px);
+    min-height: 100dvh;
+    margin: 0 auto;
+    padding: 34px 34px 64px;
+  }
+
+  .question-wrap {
+    padding-top: 11vh;
+  }
+
+  .result-shell {
+    width: min(100%, 720px);
+    margin: 0 auto;
+  }
+
+  .quiz-brand-row {
+    margin-bottom: 16px;
+  }
+}

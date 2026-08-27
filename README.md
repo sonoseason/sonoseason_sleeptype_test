@@ -1,21 +1,16 @@
-# SONOSEASON Mattress Finder V3
+# SONOSEASON Mattress Finder V4
 
-## 이번 업데이트
-- 브랜드 컬러 적용
-  - Main #686058
-  - Sub 01 #C6A291
-  - Sub 02 #D2C6C3
-  - White #FFFFFF
-  - Black #1C1C1B
-- 전체 Pretendard 적용
-- 7문항 구조 반영
-- 현재 추천 대상 5개 제품 반영
-  - 컴포터블
-  - 어드밴스 미디엄 소프트
-  - 어드밴스 미디엄
-  - 센세이션
-  - 시그니처
-- 결과 페이지에 수면 프로필 / 추천 이유 / 1~3순위 제품 표시
+이번 업데이트
+- 기존 V3 모바일 디자인 유지
+- PC 질문 화면 중앙 정렬 및 최대 폭 조정
+- PC/모바일 동일한 7문항 script.js 사용
+- SONOSEASON 로고 이미지 적용
+  - 메인: white logo
+  - 질문 화면: dark logo
+- 추천 매트리스 문구 수정
+- ALSO RECOMMENDED → ANOTHER RECOMMEND
+- TRY IT IN STORE 아래 '매장 찾아보기' 버튼 추가
+- 매장 링크: https://www.sonoseason.com/showroom/store-reservation
 
-## GitHub 적용
-기존 repository의 index.html / style.css / script.js 세 파일을 각각 이 버전으로 교체한 뒤 Commit changes 하면 됩니다.
+GitHub에는 ZIP 내부 파일을 repository 최상위에 업로드/교체하세요.
+특히 index.html, style.css, script.js와 두 PNG 로고 파일이 모두 필요합니다.
