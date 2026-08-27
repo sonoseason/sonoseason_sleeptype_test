@@ -89,7 +89,7 @@ const PRODUCTS = [
     name: "컴포터블",
     firmness: "MEDIUM",
     height: 270,
-    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00003883"
+    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00005661"
   },
   {
     id: "advance_ms",
@@ -111,7 +111,7 @@ const PRODUCTS = [
     firmness: "MEDIUM ↔ FIRM",
     height: 300,
     dual: true,
-    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00003884"
+    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00005660"
   },
   {
     id: "signature",
@@ -119,7 +119,7 @@ const PRODUCTS = [
     firmness: "MEDIUM ↔ FIRM",
     height: 340,
     dual: true,
-    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00003885"
+    url: "https://www.sonoseason.com/product/goods/view?goodsId=BO00005585"
   }
 ];
 
