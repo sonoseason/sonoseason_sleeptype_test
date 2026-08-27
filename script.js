@@ -1,152 +1,127 @@
-/*
- * SONOSEASON Mattress Test V2
- * 매장 교육용 "메모리폼 매트리스 맞춤 수면 체크리스트 & 선택 가이드" 기반
- *
- * 핵심 판단 기준
- * 1) 수면 습관
- * 2) 체형/체중
- * 3) 특수 고민
- *
- * 기존 1차 프로토타입의 취향형 점수 로직을 제거하고,
- * 매장 교육 가이드의 추천 경도와 매칭 모델을 중심으로 구성했습니다.
- */
-
 const QUESTIONS = [
   {
     id: "posture",
-    kicker: "SLEEP HABIT",
-    text: "주로 어떤 자세로 자나요?",
+    kicker: "SLEEP POSITION",
+    text: "평소 가장 자주 자는 자세는 무엇인가요?",
     sub: "가장 자주 취하는 수면 자세를 골라주세요.",
     answers: [
-      {
-        id: "back",
-        text: "바르게 누워 자는 편이에요",
-        tags: ["바른 자세", "허리 지지"],
-        guidance: "척추의 S자 곡선 유지와 요추 지지가 중요한 타입이에요.",
-        firmness: "Firm ~ Medium Firm"
-      },
-      {
-        id: "side",
-        text: "옆으로 누워 자는 편이에요",
-        tags: ["옆으로 수면", "체압 분산"],
-        guidance: "어깨와 골반에 집중되는 체압을 부드럽게 분산해주는 것이 중요한 타입이에요.",
-        firmness: "Medium ~ Medium Soft"
-      },
-      {
-        id: "toss",
-        text: "뒤척임이 많고 자주 깨는 편이에요",
-        tags: ["뒤척임", "움직임 흡수"],
-        guidance: "흔들림을 줄이고 움직임에 맞춰 체형을 받쳐주는 것이 중요한 타입이에요.",
-        firmness: "Medium"
-      }
+      { id: "back", text: "바르게 누워 자는 편이에요" },
+      { id: "side", text: "옆으로 누워 자는 편이에요" },
+      { id: "move", text: "자세를 자주 바꾸며 자는 편이에요" }
+    ]
+  },
+  {
+    id: "current",
+    kicker: "CURRENT MATTRESS",
+    text: "현재 매트리스에서 가장 아쉬운 점은 무엇인가요?",
+    sub: "지금 사용 중인 매트리스를 떠올려주세요.",
+    answers: [
+      { id: "too_firm", text: "너무 단단해서 몸이 눌리는 느낌이 들어요" },
+      { id: "too_soft", text: "너무 푹신해서 몸이 많이 가라앉는 느낌이에요" },
+      { id: "not_refreshed", text: "자고 일어나도 개운하지 않은 느낌이에요" },
+      { id: "fine", text: "특별히 불편한 점은 없어요" }
+    ]
+  },
+  {
+    id: "feel",
+    kicker: "COMFORT",
+    text: "매트리스에 처음 누웠을 때 어떤 느낌을 선호하나요?",
+    sub: "정답보다 본인의 취향에 가까운 느낌을 골라주세요.",
+    answers: [
+      { id: "soft", text: "몸을 부드럽게 감싸주는 느낌" },
+      { id: "balanced", text: "푹신함과 탄탄함이 적당히 균형 잡힌 느낌" },
+      { id: "supportive", text: "몸을 탄탄하게 받쳐주는 느낌" },
+      { id: "unknown", text: "아직 잘 모르겠어요" }
     ]
   },
   {
     id: "body",
     kicker: "BODY TYPE",
-    text: "내 체형은 어떤 편인가요?",
+    text: "체형은 어느 쪽에 가까운가요?",
     sub: "현재 체형에 가장 가까운 답을 골라주세요.",
     answers: [
-      {
-        id: "light",
-        text: "체중이 가볍거나 마른 편이에요",
-        tags: ["가벼운 체형", "부드러운 지지"],
-        guidance: "너무 단단한 매트리스보다 부드러운 체압 분산이 필요한 타입이에요.",
-        firmness: "Soft ~ Medium Soft"
-      },
-      {
-        id: "large",
-        text: "체형이 크거나 체중이 나가는 편이에요",
-        tags: ["큰 체형", "탄탄한 지지"],
-        guidance: "과도하게 꺼지지 않도록 탄탄하게 받쳐주는 것이 중요한 타입이에요.",
-        firmness: "Firm"
-      },
-      {
-        id: "average",
-        text: "보통 체형이에요",
-        tags: ["보통 체형", "균형"],
-        guidance: "수면 자세와 특수 고민을 중심으로 경도를 판단해볼게요.",
-        firmness: "자세에 따라 결정"
-      }
+      { id: "light", text: "체중이 가볍거나 마른 편이에요" },
+      { id: "average", text: "보통 체형이에요" },
+      { id: "large", text: "체형이 크거나 체중이 나가는 편이에요" }
     ]
   },
   {
     id: "concern",
     kicker: "SLEEP CONCERN",
-    text: "수면 중 특별히 신경 쓰이는 부분이 있나요?",
-    sub: "가장 가까운 고민을 골라주세요.",
+    text: "평소 수면에서 가장 신경 쓰이는 부분은 무엇인가요?",
+    sub: "가장 가까운 한 가지를 골라주세요.",
     answers: [
-      {
-        id: "back_neck",
-        text: "허리가 불편하거나 목·어깨가 자주 결려요",
-        tags: ["허리", "목·어깨"],
-        guidance: "척추를 안정적으로 지지하면서 전신 체압을 균일하게 분산하는 것이 중요한 타입이에요.",
-        firmness: "Medium Firm"
-      },
-      {
-        id: "none",
-        text: "특별한 고민은 없어요",
-        tags: ["일반 수면", "균형"],
-        guidance: "수면 자세와 체형을 중심으로 추천해드릴게요.",
-        firmness: "자세에 따라 결정"
-      }
+      { id: "back", text: "허리가 불편한 편이에요" },
+      { id: "neck", text: "목이나 어깨가 자주 결리는 편이에요" },
+      { id: "toss", text: "뒤척임이 많거나 자주 깨요" },
+      { id: "none", text: "특별히 신경 쓰이는 부분은 없어요" }
+    ]
+  },
+  {
+    id: "height",
+    kicker: "MATTRESS HEIGHT",
+    text: "매트리스 높이는 어느 쪽을 선호하나요?",
+    sub: "높이는 경도와 별도로 제품을 세분화하는 기준으로 활용돼요.",
+    answers: [
+      { id: "low", text: "낮고 깔끔한 스타일" },
+      { id: "standard", text: "적당한 높이" },
+      { id: "high", text: "높고 볼륨감 있는 스타일" },
+      { id: "any", text: "높이는 크게 상관없어요" }
+    ]
+  },
+  {
+    id: "priority",
+    kicker: "FINAL CHECK",
+    text: "마지막으로, 매트리스를 고를 때 가장 중요한 것은?",
+    sub: "가장 중요하게 생각하는 한 가지를 골라주세요.",
+    answers: [
+      { id: "soft", text: "몸을 편안하게 감싸주는 느낌" },
+      { id: "balance", text: "푹신함과 지지감의 균형" },
+      { id: "firm", text: "탄탄하게 받쳐주는 안정감" },
+      { id: "compare", text: "잘 모르겠어서 직접 비교해보고 싶어요" }
     ]
   }
 ];
 
-/*
- * 사용자가 앞서 제공한 현재 제품 라인업 기준
- * 시그니처 듀얼 340mm / Medium·Firm
- * 센세이션 듀얼 300mm / Medium·Firm
- * 어드밴스 소프트 300mm / Soft
- * 어드밴스 미디엄 300mm / Medium
- * 어드밴스 펌 300mm / Firm
- * 컴포터블 270mm / Medium
- * 스탠다드 미디엄 270mm / Medium
- * 스탠다드 펌 270mm / Firm
- * 베이직 190mm / Medium
- *
- * 실제 판매 URL은 각 product.url에 입력하면 됩니다.
- */
-
-const PRODUCTS = {
-  signatureMedium: {
-    name: "시그니처 듀얼",
-    meta: ["340mm", "MEDIUM / FIRM"],
-    reason: "가벼운 체형에서 Soft ~ Medium Soft를 고려할 때, 매장 가이드에 매칭된 시그니처 Medium 모드를 우선 체험해볼 수 있어요.",
+const PRODUCTS = [
+  {
+    id: "comfortable",
+    name: "컴포터블",
+    firmness: "MEDIUM",
+    height: 270,
     url: ""
   },
-  sensationFirm: {
-    name: "센세이션 듀얼",
-    meta: ["300mm", "MEDIUM / FIRM"],
-    reason: "탄탄한 지지가 필요한 경우 Firm 모드로 체험해볼 수 있는 매장 가이드 매칭 모델이에요.",
+  {
+    id: "advance_ms",
+    name: "어드밴스 미디엄 소프트",
+    firmness: "MEDIUM SOFT",
+    height: 300,
     url: ""
   },
-  sensationMedium: {
-    name: "센세이션 듀얼",
-    meta: ["300mm", "MEDIUM / FIRM"],
-    reason: "옆으로 자는 타입에서 Medium ~ Medium Soft를 고려할 때 Medium 모드로 체험해볼 수 있어요.",
-    url: ""
-  },
-  sensationDual: {
-    name: "센세이션 듀얼",
-    meta: ["300mm", "MEDIUM / FIRM"],
-    reason: "뒤척임이 많은 타입의 매장 가이드 매칭 모델로, 양면 듀얼 토퍼 구성을 직접 비교해볼 수 있어요.",
-    url: ""
-  },
-  advanceMedium: {
+  {
+    id: "advance_m",
     name: "어드밴스 미디엄",
-    meta: ["300mm", "MEDIUM"],
-    reason: "Medium 경도가 필요한 타입에서 체형과 수면 자세를 함께 확인할 수 있는 매장 가이드 매칭 모델이에요.",
+    firmness: "MEDIUM",
+    height: 300,
     url: ""
   },
-  advanceFirm: {
-    name: "어드밴스 펌",
-    meta: ["300mm", "FIRM"],
-    reason: "탄탄한 지지가 필요한 타입에서 Firm 경도를 직접 확인해볼 수 있어요.",
+  {
+    id: "sensation",
+    name: "센세이션",
+    firmness: "MEDIUM ↔ FIRM",
+    height: 300,
+    dual: true,
+    url: ""
+  },
+  {
+    id: "signature",
+    name: "시그니처",
+    firmness: "MEDIUM ↔ FIRM",
+    height: 340,
+    dual: true,
     url: ""
   }
-};
+];
 
 const state = {
   current: 0,
@@ -166,7 +141,7 @@ function showScreen(id) {
   window.scrollTo(0, 0);
 }
 
-function resetState() {
+function resetTest() {
   state.current = 0;
   state.answers = {};
 }
@@ -174,15 +149,11 @@ function resetState() {
 function renderQuestion() {
   const q = QUESTIONS[state.current];
 
-  $("questionKicker").textContent =
-    `QUESTION ${String(state.current + 1).padStart(2, "0")} · ${q.kicker}`;
-
+  $("questionKicker").textContent = q.kicker;
+  $("questionIndex").textContent = `Q${state.current + 1}.`;
   $("questionText").textContent = q.text;
   $("questionSub").textContent = q.sub;
-
-  $("countText").textContent =
-    `${state.current + 1} / ${QUESTIONS.length}`;
-
+  $("countText").textContent = `${state.current + 1} / ${QUESTIONS.length}`;
   $("progressBar").style.width =
     `${((state.current + 1) / QUESTIONS.length) * 100}%`;
 
@@ -198,170 +169,198 @@ function renderQuestion() {
     `;
 
     button.addEventListener("click", () => {
-      state.answers[q.id] = answer;
-      goNext();
+      state.answers[q.id] = answer.id;
+
+      if (state.current < QUESTIONS.length - 1) {
+        state.current += 1;
+        renderQuestion();
+      } else {
+        showScreen("loadingScreen");
+        setTimeout(showResult, 900);
+      }
     });
 
     container.appendChild(button);
   });
 }
 
-function goNext() {
-  if (state.current < QUESTIONS.length - 1) {
-    state.current += 1;
-    renderQuestion();
-    return;
-  }
+function calculateResult() {
+  let firmnessScore = 0;
 
-  showScreen("loadingScreen");
-  setTimeout(showResult, 700);
-}
+  const a = state.answers;
 
-function goBack() {
-  if (state.current === 0) {
-    showScreen("homeScreen");
-    return;
-  }
+  // 핵심 진단
+  if (a.posture === "back") firmnessScore += 2;
+  if (a.posture === "side") firmnessScore -= 2;
+  if (a.posture === "move") firmnessScore += 0;
 
-  state.current -= 1;
-  renderQuestion();
-}
+  if (a.body === "light") firmnessScore -= 2;
+  if (a.body === "large") firmnessScore += 2;
 
-/*
- * 매장 교육 가이드 기반 추천 로직
- *
- * 가이드에 명시된 기준:
- * - 수면 자세 A(바르게): Firm ~ Medium Firm
- * - 수면 자세 B(옆으로): Medium ~ Medium Soft
- * - 수면 자세 C(뒤척임): Medium
- * - 체형/체중 A(가벼움/마른): Soft ~ Medium Soft
- * - 체형/체중 B(큼/체중이 나감): Firm
- * - 특수 고민(허리 불편/목·어깨 결림): Medium Firm
- *
- * 조건이 충돌하면 아래 우선순위로 보정:
- * 1. 특수 고민
- * 2. 체형/체중
- * 3. 수면 자세
- *
- * 본 테스트는 매장 상담을 돕는 참고용 추천이며 의료적 진단이 아닙니다.
- */
-function calculateRecommendation() {
-  const posture = state.answers.posture?.id;
-  const body = state.answers.body?.id;
-  const concern = state.answers.concern?.id;
+  if (a.concern === "back" || a.concern === "neck") firmnessScore += 1;
+  if (a.concern === "toss") firmnessScore += 0;
 
-  // 1) 특수 고민 → Medium Firm
-  if (concern === "back_neck") {
-    if (body === "large" || posture === "back") {
-      return {
-        key: "sensationFirm",
-        firmness: "Medium Firm",
-        reason: "허리·목/어깨 고민을 고려해 Medium Firm을 우선 추천해요. 바르게 눕거나 체형이 큰 경우에는 탄탄한 지지가 필요한 만큼 Firm 모드부터 함께 체험해보세요."
-      };
+  // 취향 보정
+  if (a.current === "too_firm") firmnessScore -= 1;
+  if (a.current === "too_soft") firmnessScore += 1;
+
+  if (a.feel === "soft") firmnessScore -= 1;
+  if (a.feel === "supportive") firmnessScore += 1;
+
+  if (a.priority === "soft") firmnessScore -= 1;
+  if (a.priority === "firm") firmnessScore += 1;
+
+  let firmness;
+  if (firmnessScore <= -3) firmness = "MEDIUM SOFT";
+  else if (firmnessScore >= 3) firmness = "MEDIUM ~ FIRM";
+  else firmness = "MEDIUM";
+
+  const scored = PRODUCTS.map((product) => {
+    let score = 0;
+
+    if (firmness === "MEDIUM SOFT") {
+      if (product.id === "advance_ms") score += 8;
+      if (product.firmness === "MEDIUM") score += 3;
     }
 
-    return {
-      key: "advanceMedium",
-      firmness: "Medium Firm",
-      reason: "허리·목/어깨 고민을 고려해 Medium Firm을 우선 추천해요. 실제 매장에서는 어드밴스 미디엄을 함께 비교해보세요."
-    };
-  }
+    if (firmness === "MEDIUM") {
+      if (product.firmness === "MEDIUM") score += 7;
+      if (product.id === "sensation") score += 4;
+      if (product.id === "advance_ms") score += 2;
+    }
 
-  // 2) 체형이 크거나 체중이 나가는 경우 → Firm
-  if (body === "large") {
-    return {
-      key: "sensationFirm",
-      firmness: "Firm",
-      reason: "체형이 크거나 체중이 나가는 경우 과도한 꺼짐을 방지하고 탄탄하게 받쳐주는 Firm 경도를 우선 고려해요."
-    };
-  }
+    if (firmness === "MEDIUM ~ FIRM") {
+      if (product.dual) score += 8;
+      if (product.id === "advance_m") score += 2;
+    }
 
-  // 3) 체중이 가볍거나 마른 경우 → Soft ~ Medium Soft
-  if (body === "light") {
-    return {
-      key: "signatureMedium",
-      firmness: "Soft ~ Medium Soft",
-      reason: "체중이 가볍거나 마른 체형은 너무 단단한 매트리스에서 압박감을 느낄 수 있어 Soft ~ Medium Soft를 우선 고려해요. 가이드에는 시그니처 Medium 모드가 매칭되어 있어요."
-    };
-  }
+    // 높이 보정
+    if (a.height === "standard" && product.height === 270) score += 3;
+    if (a.height === "high" && product.height >= 300) score += 3;
+    if (a.height === "low" && product.height === 270) score += 2;
+    if (a.height === "any") score += 1;
 
-  // 4) 바르게 눕는 타입 → Firm ~ Medium Firm
-  if (posture === "back") {
-    return {
-      key: "sensationFirm",
-      firmness: "Firm ~ Medium Firm",
-      reason: "바르게 누워 자는 타입은 척추의 S자 곡선을 유지하고 요추를 안정적으로 지지하는 것이 중요해 Firm ~ Medium Firm을 우선 고려해요."
-    };
-  }
+    // 직접 비교를 원하는 경우 듀얼 제품 가산
+    if (a.priority === "compare" && product.dual) score += 3;
 
-  // 5) 옆으로 자는 타입 → Medium ~ Medium Soft
-  if (posture === "side") {
-    return {
-      key: "sensationMedium",
-      firmness: "Medium ~ Medium Soft",
-      reason: "옆으로 자면 어깨와 골반에 체압이 집중될 수 있어 Medium ~ Medium Soft를 우선 고려해요."
-    };
-  }
+    return { ...product, score };
+  }).sort((x, y) => y.score - x.score);
 
-  // 6) 뒤척임이 많은 타입 → Medium
-  if (posture === "toss") {
-    return {
-      key: "sensationDual",
-      firmness: "Medium",
-      reason: "뒤척임이 많은 타입은 흔들림을 줄이고 움직임에 맞춰 체형을 받쳐주는 것이 중요해 Medium을 우선 고려해요."
-    };
-  }
-
-  // 7) 기본값 → Medium
   return {
-    key: "advanceMedium",
-    firmness: "Medium",
-    reason: "수면 자세와 체형에 따른 추가 조건이 적어 균형 잡힌 Medium 경도를 우선 추천해요."
+    firmness,
+    products: scored.slice(0, 3),
+    score: firmnessScore
   };
 }
 
-function buildTraits() {
-  const traits = [];
+function profileData() {
+  const a = state.answers;
 
-  [state.answers.posture, state.answers.body, state.answers.concern]
-    .forEach((answer) => {
-      if (!answer) return;
+  const lookup = {
+    posture: {
+      back: "바르게 누워 자는 편",
+      side: "옆으로 누워 자는 편",
+      move: "자세를 자주 바꾸는 편"
+    },
+    body: {
+      light: "가벼운 / 마른 체형",
+      average: "보통 체형",
+      large: "크거나 체중이 나가는 체형"
+    },
+    feel: {
+      soft: "부드럽게 감싸는 느낌",
+      balanced: "균형 잡힌 느낌",
+      supportive: "탄탄한 느낌",
+      unknown: "아직 잘 모르겠음"
+    },
+    concern: {
+      back: "허리 불편",
+      neck: "목·어깨 결림",
+      toss: "뒤척임 / 자주 깸",
+      none: "특별한 고민 없음"
+    },
+    height: {
+      low: "낮은 편",
+      standard: "적당한 높이",
+      high: "높은 편",
+      any: "상관없음"
+    }
+  };
 
-      answer.tags.forEach((tag) => {
-        if (!traits.includes(tag)) traits.push(tag);
-      });
-    });
+  return [
+    ["수면 자세", lookup.posture[a.posture]],
+    ["체형", lookup.body[a.body]],
+    ["선호 착와감", lookup.feel[a.feel]],
+    ["현재 고민", lookup.concern[a.concern]],
+    ["선호 높이", lookup.height[a.height]]
+  ];
+}
 
-  return traits.slice(0, 5);
+function resultCopy(firmness) {
+  if (firmness === "MEDIUM SOFT") {
+    return {
+      desc: "부드러운 체압 분산과 편안한 착와감을 우선 고려해보세요.",
+      why: "수면 자세와 체형, 현재 매트리스에서 느끼는 압박감과 선호 착와감을 함께 반영했을 때 부드러운 방향의 경도가 더 잘 맞는 결과예요."
+    };
+  }
+
+  if (firmness === "MEDIUM ~ FIRM") {
+    return {
+      desc: "균형감 있는 지지부터 탄탄한 안정감까지 직접 비교해보세요.",
+      why: "수면 자세와 체형을 종합했을 때 안정적인 지지감이 중요하게 나타났어요. 매장에서는 Medium과 Firm 느낌을 함께 비교해보는 것을 권장해요."
+    };
+  }
+
+  return {
+    desc: "푹신함과 지지감의 균형을 우선 고려해보세요.",
+    why: "수면 자세와 체형, 선호 착와감을 종합했을 때 어느 한쪽으로 치우치기보다 균형 잡힌 Medium 경도가 가장 적합한 결과예요."
+  };
 }
 
 function showResult() {
-  const recommendation = calculateRecommendation();
-  const product = PRODUCTS[recommendation.key];
+  const result = calculateResult();
+  const copy = resultCopy(result.firmness);
+  const [first, second, third] = result.products;
 
-  // 기존 HTML 구조를 그대로 사용합니다.
-  const resultLabel = document.querySelector(".result-label");
-  if (resultLabel) {
-    resultLabel.textContent = "당신의 수면 정보를 기준으로 보면";
-  }
+  $("resultTitle").textContent = result.firmness;
+  $("resultDesc").textContent = copy.desc;
+  $("whyText").textContent = copy.why;
 
-  $("resultTitle").textContent = recommendation.firmness;
-  $("resultDesc").textContent = recommendation.reason;
-
-  $("traits").innerHTML = buildTraits()
-    .map((tag) => `<span class="trait">#${tag}</span>`)
+  $("profileList").innerHTML = profileData()
+    .map(([label, value]) => `
+      <div class="profile-row">
+        <span class="label">${label}</span>
+        <span class="value">${value}</span>
+      </div>
+    `)
     .join("");
 
-  $("recommendTitle").textContent = product.name;
-  $("recommendReason").textContent = product.reason;
+  $("recommendTitle").textContent = first.name;
+  $("productMeta").innerHTML = `
+    <span>${first.firmness}</span>
+    <span>${first.height}mm</span>
+  `;
 
-  $("productMeta").innerHTML = product.meta
-    .map((item) => `<span>${item}</span>`)
+  $("recommendReason").textContent =
+    `고객님의 수면 조건과 취향을 종합했을 때 가장 먼저 체험해볼 것을 추천하는 매트리스입니다.`;
+
+  $("alsoProducts").innerHTML = [second, third]
+    .filter(Boolean)
+    .map((product, index) => `
+      <div class="also-product">
+        <span class="num">${String(index + 2).padStart(2, "0")}</span>
+        <div>
+          <strong>${product.name}</strong>
+          <small>${product.firmness} · ${product.height}mm</small>
+        </div>
+        <span class="arrow">→</span>
+      </div>
+    `)
     .join("");
 
   $("productBtn").onclick = () => {
-    if (product.url) {
-      window.open(product.url, "_blank", "noopener,noreferrer");
+    if (first.url) {
+      window.open(first.url, "_blank", "noopener,noreferrer");
     } else {
       showScreen("placeholderScreen");
     }
@@ -371,17 +370,35 @@ function showResult() {
 }
 
 function startTest() {
-  resetState();
+  resetTest();
   renderQuestion();
   showScreen("quizScreen");
 }
 
-async function shareResult() {
-  const recommendation = calculateRecommendation();
+$("startBtn").addEventListener("click", startTest);
+
+$("backBtn").addEventListener("click", () => {
+  if (state.current === 0) {
+    showScreen("homeScreen");
+    return;
+  }
+
+  state.current -= 1;
+  renderQuestion();
+});
+
+$("retryBtn").addEventListener("click", startTest);
+
+$("placeholderBack").addEventListener("click", () => {
+  showScreen("resultScreen");
+});
+
+$("shareBtn").addEventListener("click", async () => {
+  const result = calculateResult();
 
   const shareData = {
     title: "나에게 맞는 매트리스 찾기",
-    text: `SONOSEASON 매트리스 테스트 결과: ${recommendation.firmness} 추천`,
+    text: `SONOSEASON 매트리스 테스트 결과: ${result.firmness}`,
     url: window.location.href
   };
 
@@ -389,27 +406,16 @@ async function shareResult() {
     try {
       await navigator.share(shareData);
       return;
-    } catch (error) {
-      // 사용자가 공유창을 닫은 경우
-    }
+    } catch (e) {}
   }
 
   try {
     await navigator.clipboard.writeText(window.location.href);
     $("shareBtn").textContent = "링크가 복사됐어요";
-
     setTimeout(() => {
       $("shareBtn").textContent = "결과 공유하기";
-    }, 1600);
-  } catch (error) {
-    alert("이 페이지의 주소를 복사해서 공유해주세요.");
+    }, 1500);
+  } catch (e) {
+    alert("페이지 주소를 복사해서 공유해주세요.");
   }
-}
-
-$("startBtn").addEventListener("click", startTest);
-$("backBtn").addEventListener("click", goBack);
-$("retryBtn").addEventListener("click", startTest);
-$("shareBtn").addEventListener("click", shareResult);
-$("placeholderBack").addEventListener("click", () => {
-  showScreen("resultScreen");
 });

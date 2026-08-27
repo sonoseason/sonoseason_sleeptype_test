@@ -3,81 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#9a9183">
+  <meta name="theme-color" content="#686058">
   <title>나에게 맞는 매트리스 찾기 | SONOSEASON</title>
+
+  <!-- Pretendard Webfont -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main id="app">
-    <section class="screen active" id="homeScreen">
-      <div class="hero">
-        <p class="eyebrow">SONOSEASON MATTRESS</p>
-        <h1>나에게 맞는<br><em>매트리스</em> 찾기</h1>
-        <p class="lead">몇 가지 질문으로 나의 매트리스 취향을 알아보세요.</p>
-        <button class="primary" id="startBtn">테스트 시작하기 <span>→</span></button>
-        <p class="notice">약 2분 · 총 5문항</p>
+
+    <!-- START -->
+    <section class="screen active start-screen" id="homeScreen">
+      <div class="start-inner">
+        <div class="brand">SONOSEASON</div>
+        <p class="eyebrow">MATTRESS FINDER</p>
+
+        <h1>나에게 맞는<br>매트리스 찾기</h1>
+
+        <p class="lead">
+          수면 습관과 체형,<br>
+          선호하는 착와감을 바탕으로<br>
+          나에게 맞는 매트리스를 찾아보세요.
+        </p>
+
+        <button class="primary-btn" id="startBtn">
+          <span>테스트 시작하기</span>
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <p class="micro">약 2분 · 총 7문항</p>
       </div>
-      <div class="bottom-note">본 테스트는 제품 선택을 위한 참고 정보입니다.</div>
+
+      <p class="disclaimer">
+        본 테스트 결과는 제품 선택을 돕기 위한 참고 정보입니다.
+      </p>
     </section>
 
-    <section class="screen" id="quizScreen">
-      <div class="quiz-wrap">
+    <!-- QUIZ -->
+    <section class="screen quiz-screen" id="quizScreen">
+      <div class="quiz-shell">
         <header class="quiz-header">
-          <button class="icon-btn" id="backBtn" aria-label="이전">←</button>
-          <div class="progress"><span id="progressBar"></span></div>
-          <span class="count" id="countText">1 / 5</span>
+          <button class="back-btn" id="backBtn" aria-label="이전 질문">←</button>
+
+          <div class="progress-track" aria-hidden="true">
+            <span id="progressBar"></span>
+          </div>
+
+          <span class="count" id="countText">1 / 7</span>
         </header>
 
-        <div class="question-area">
-          <p class="question-kicker" id="questionKicker">QUESTION 01</p>
+        <section class="question-wrap">
+          <p class="question-kicker" id="questionKicker">SLEEP POSITION</p>
+          <p class="question-index" id="questionIndex">Q1.</p>
+
           <h2 id="questionText"></h2>
           <p class="question-sub" id="questionSub"></p>
+
           <div class="answers" id="answers"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- LOADING -->
+    <section class="screen loading-screen" id="loadingScreen">
+      <div class="loading-inner">
+        <div class="loader" aria-hidden="true"></div>
+        <p class="eyebrow">SONOSEASON MATTRESS FINDER</p>
+        <h2>수면 습관과 취향을<br>분석하고 있어요.</h2>
+        <div class="loading-tags">
+          <span>Sleep Position</span>
+          <span>Body Type</span>
+          <span>Comfort</span>
+          <span>Firmness</span>
         </div>
       </div>
     </section>
 
-    <section class="screen" id="loadingScreen">
-      <div class="loading-wrap">
-        <div class="loader"></div>
-        <p class="eyebrow">YOUR SLEEP STYLE</p>
-        <h2>나에게 맞는<br>매트리스를 찾고 있어요.</h2>
-      </div>
-    </section>
+    <!-- RESULT -->
+    <section class="screen result-screen" id="resultScreen">
+      <div class="result-shell">
+        <header class="result-header">
+          <p class="eyebrow dark">YOUR MATTRESS GUIDE</p>
+          <p class="result-label">당신에게 추천하는 경도는</p>
+          <h1 id="resultTitle"></h1>
+          <p class="result-desc" id="resultDesc"></p>
+        </header>
 
-    <section class="screen" id="resultScreen">
-      <div class="result-wrap">
-        <p class="eyebrow">YOUR MATTRESS STYLE</p>
-        <p class="result-label">당신의 매트리스 취향은</p>
-        <h1 id="resultTitle"></h1>
-        <p class="result-desc" id="resultDesc"></p>
+        <section class="profile-card">
+          <div class="section-head">
+            <p class="section-label">MY SLEEP PROFILE</p>
+            <h2>나의 수면 프로필</h2>
+          </div>
+          <div class="profile-list" id="profileList"></div>
+        </section>
 
-        <div class="traits" id="traits"></div>
+        <section class="why-card">
+          <p class="section-label">WHY THIS FIRMNESS?</p>
+          <h2>이 경도를 추천하는 이유</h2>
+          <p id="whyText"></p>
+        </section>
 
-        <div class="recommend-box">
-          <p class="box-label">RECOMMENDED</p>
-          <h2 id="recommendTitle"></h2>
-          <p id="recommendReason"></p>
-          <div class="product-meta" id="productMeta"></div>
-          <button class="secondary" id="productBtn">추천 제품 보기 <span>→</span></button>
-        </div>
+        <section class="recommend-section">
+          <div class="section-head">
+            <p class="section-label">BEST MATCH</p>
+            <h2>추천 매트리스</h2>
+          </div>
+
+          <article class="best-product">
+            <div class="rank">01</div>
+            <div class="product-copy">
+              <h3 id="recommendTitle"></h3>
+              <div class="product-meta" id="productMeta"></div>
+              <p id="recommendReason"></p>
+            </div>
+
+            <button class="product-btn" id="productBtn">
+              <span>제품 자세히 보기</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </article>
+
+          <div class="also-title">ALSO RECOMMENDED</div>
+          <div class="also-products" id="alsoProducts"></div>
+        </section>
+
+        <section class="store-card">
+          <p class="section-label">TRY IT IN STORE</p>
+          <h2>이제 직접 누워보세요.</h2>
+
+          <div class="store-steps">
+            <div><span>01</span><p>매트리스에 편하게 앉아보세요.</p></div>
+            <div><span>02</span><p>평소 자는 자세로 약 3분간 누워보세요.</p></div>
+            <div><span>03</span><p>허리와 매트리스 사이의 뜨는 공간을 확인해보세요.</p></div>
+          </div>
+        </section>
 
         <div class="result-actions">
-          <button class="text-btn" id="retryBtn">다시 테스트하기</button>
-          <button class="share-btn" id="shareBtn">결과 공유하기</button>
+          <button class="outline-btn" id="retryBtn">다시 테스트하기</button>
+          <button class="text-btn" id="shareBtn">결과 공유하기</button>
         </div>
       </div>
     </section>
 
-    <section class="screen" id="placeholderScreen">
-      <div class="placeholder">
-        <p class="eyebrow">SONOSEASON</p>
+    <!-- PRODUCT PLACEHOLDER -->
+    <section class="screen placeholder-screen" id="placeholderScreen">
+      <div class="placeholder-inner">
+        <p class="eyebrow dark">SONOSEASON</p>
         <h2>제품 상세 페이지</h2>
-        <p>실제 제품 URL을 입력하면 이 버튼과 연결할 수 있어요.</p>
-        <button class="secondary" id="placeholderBack">테스트 결과로 돌아가기</button>
+        <p>
+          아직 실제 제품 URL을 연결하지 않았어요.<br>
+          추후 제품 URL을 입력하면 바로 연결할 수 있습니다.
+        </p>
+        <button class="primary-btn compact" id="placeholderBack">결과로 돌아가기</button>
       </div>
     </section>
+
   </main>
+
   <script src="script.js"></script>
 </body>
 </html>
